@@ -8,26 +8,30 @@ type FormData = {
     name: string;
     date: string;
     subject: string;
-    message: string;
+    description: string;
 };
 
 const schema = yup.object({
     name: yup.string().required("Nome é obrigatório"),
     date: yup.string().required("Data é obrigatória"),
     subject: yup.string().required("Selecione um assunto"),
-    message: yup
+    description: yup
         .string()
         .required("Mensagem é obrigatória")
         .min(10, "A descrição precisa ter pelo menos 10 caracteres"),
 });
 
 export default function App() {
-    const { control, handleSubmit } = useForm<FormData>({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>({
         defaultValues: {
             name: "",
             date: "",
             subject: "",
-            message: "",
+            description: "",
         },
 
         resolver: yupResolver(schema),
@@ -54,7 +58,9 @@ export default function App() {
                     )}
                 ></Controller>
 
-                <span className="error">Nome é obrigatório</span>
+                {errors.name?.message && (
+                    <span className="error">{errors.name.message}</span>
+                )}
 
                 <Controller
                     control={control}
@@ -68,6 +74,10 @@ export default function App() {
                         />
                     )}
                 ></Controller>
+
+                {errors.date?.message && (
+                    <span className="error">{errors.date.message}</span>
+                )}
 
                 <Controller
                     control={control}
@@ -86,13 +96,21 @@ export default function App() {
                     )}
                 ></Controller>
 
+                {errors.subject?.message && (
+                    <span className="error">{errors.subject.message}</span>
+                )}
+
                 <Controller
                     control={control}
-                    name="message"
+                    name="description"
                     render={({ field }) => (
                         <textarea placeholder="Descrição" rows={4} {...field} />
                     )}
                 ></Controller>
+
+                {errors.description?.message && (
+                    <span className="error">{errors.description.message}</span>
+                )}
 
                 <button type="submit">Salvar</button>
             </form>
