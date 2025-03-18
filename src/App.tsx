@@ -1,6 +1,8 @@
 import "./App.css";
 
 import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 type FormData = {
     name: string;
@@ -8,6 +10,8 @@ type FormData = {
     subject: string;
     message: string;
 };
+
+const schema = yup.object({});
 
 export default function App() {
     const { control, handleSubmit } = useForm<FormData>({
@@ -17,6 +21,8 @@ export default function App() {
             subject: "",
             message: "",
         },
+
+        resolver: yupResolver(schema),
     });
 
     function onSubmit(data: FormData) {
